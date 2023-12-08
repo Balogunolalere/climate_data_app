@@ -1,0 +1,5 @@
+streamlit
+meteostat
+pandas
+matplotlib
+plotly

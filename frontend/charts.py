@@ -3,30 +3,46 @@ import plotly.express as px
 
 
 def create_temperature_chart(climate_data):
-    """
-    Create a temperature chart using the climate data.
-
-    Parameters:
-    climate_data (DataFrame): The climate data to use for the chart.
-
-    Returns:
-    Plotly chart: A temperature chart.
-    """
-    # Create a line chart
     temperature_chart = px.line(
         climate_data,
         x=climate_data.index,
         y='tavg',
-        title='Temperature'
+        title='Temperature',
+        hover_data=['tmin', 'tmax']  # Add hover data
     )
-
-    # Customize the chart layout
     temperature_chart.update_layout(
         xaxis_title='Date',
         yaxis_title='Temperature (°C)',
-        showlegend=False
+        showlegend=False,
+        updatemenus=[  # Add a dropdown menu
+            dict(
+                buttons=list([
+                    dict(
+                        args=[{"y": [climate_data['tavg']]}],
+                        label='Average Temperature',
+                        method='restyle'
+                    ),
+                    dict(
+                        args=[{"y": [climate_data['tmin']]}],
+                        label='Minimum Temperature',
+                        method='restyle'
+                    ),
+                    dict(
+                        args=[{"y": [climate_data['tmax']]}],
+                        label='Maximum Temperature',
+                        method='restyle'
+                    )
+                ]),
+                direction='down',
+                pad={'r': 10, 't': 10},
+                showactive=True,
+                x=0,
+                xanchor='left',
+                y=1.1,
+                yanchor='top'
+            ),
+        ]
     )
-
     return temperature_chart
 
 #Precipitation
