@@ -2,47 +2,23 @@ import matplotlib.pyplot as plt
 import plotly.express as px
 
 
+import plotly.graph_objects as go
+
 def create_temperature_chart(climate_data):
-    temperature_chart = px.line(
-        climate_data,
-        x=climate_data.index,
-        y='tavg',
-        title='Temperature',
-        hover_data=['tmin', 'tmax']  # Add hover data
-    )
+    temperature_chart = go.Figure()
+
+    # Add traces for average, min, and max temperature
+    temperature_chart.add_trace(go.Scatter(x=climate_data.index, y=climate_data['tavg'], mode='lines', name='Average Temperature', line=dict(color='blue')))
+    temperature_chart.add_trace(go.Scatter(x=climate_data.index, y=climate_data['tmin'], mode='lines', name='Minimum Temperature', line=dict(color='red')))
+    temperature_chart.add_trace(go.Scatter(x=climate_data.index, y=climate_data['tmax'], mode='lines', name='Maximum Temperature', line=dict(color='green')))
+
+    # Update layout
     temperature_chart.update_layout(
         xaxis_title='Date',
         yaxis_title='Temperature (°C)',
-        showlegend=False,
-        updatemenus=[  # Add a dropdown menu
-            dict(
-                buttons=list([
-                    dict(
-                        args=[{"y": [climate_data['tavg']]}],
-                        label='Average Temperature',
-                        method='restyle'
-                    ),
-                    dict(
-                        args=[{"y": [climate_data['tmin']]}],
-                        label='Minimum Temperature',
-                        method='restyle'
-                    ),
-                    dict(
-                        args=[{"y": [climate_data['tmax']]}],
-                        label='Maximum Temperature',
-                        method='restyle'
-                    )
-                ]),
-                direction='down',
-                pad={'r': 10, 't': 10},
-                showactive=True,
-                x=0,
-                xanchor='left',
-                y=1.1,
-                yanchor='top'
-            ),
-        ]
+        showlegend=True,
     )
+
     return temperature_chart
 
 #Precipitation
